@@ -44,7 +44,6 @@ def Lepton_selection(particles, e_num):
 
 	channel_mask = Electrons_num_mask & Muon_num_mask
 
-
 	# Apply masks
 		
 	Electron_lepsel = PE_Electron[channel_mask]
@@ -245,6 +244,10 @@ def OSSF_maker(Leptons, builder, e_num):
 						w1_str = str((idx_list[0]+1))
 						w2_str = str((idx_list[1]+1))
 
+					#	if lepton["lep"+w1_str].Charge + lepton["lep"+w2_str].Charge != 0:
+					#		idx_list = []
+					#		continue
+
 						if (lepton["lep"+w1_str].PT > lepton["lep"+w2_str].PT):
 							builder.integer(-1*idx_list[0])
 							builder.integer(-1*idx_list[1])
@@ -262,6 +265,10 @@ def OSSF_maker(Leptons, builder, e_num):
 						w1_str = str((idx_list[0]+1))
 						w2_str = str((idx_list[1]+1))
 
+					#	if lepton["lep"+w1_str].Charge + lepton["lep"+w2_str].Charge != 0:
+					#		idx_list = []
+					#		continue
+
 						if (lepton["lep"+w1_str].PT > lepton["lep"+w2_str].PT):
 							builder.integer(idx_list[0])
 							builder.integer(idx_list[1])
@@ -277,6 +284,10 @@ def OSSF_maker(Leptons, builder, e_num):
 						builder.integer(j)
 						w1_str = str((idx_list[0]+1))
 						w2_str = str((idx_list[1]+1))
+
+					#	if lepton["lep"+w1_str].Charge + lepton["lep"+w2_str].Charge != 0:
+					#		idx_list = []
+					#		continue
 
 						if (lepton["lep"+w1_str].PT > lepton["lep"+w2_str].PT):
 							builder.integer(idx_list[0])
@@ -404,7 +415,7 @@ def Zmass_classify(ossf_particles, ossf_idx):
 	return lep_z
 
 def Selection(file_list, e_num):
-	
+
 	# Define array
 	histo = {}
 
@@ -477,16 +488,16 @@ def Selection(file_list, e_num):
 		ossf_idx_abs = abs(ossf_idx)
 
 		if e_num == 0 or e_num == 4:
-			Z_ossf_mask_1 = ak.num(ossf_idx_abs) > 2
-			Z_ossf_mask_2 = ak.num(ossf_idx_abs) < 5
-			Z_ossf_mask = Z_ossf_mask_1 & Z_ossf_mask_2
+			ossf_mask_1 = ak.num(ossf_idx_abs) > 2
+			ossf_mask_2 = ak.num(ossf_idx_abs) < 5
+			ossf_mask = ossf_mask_1 & ossf_mask_2
 		else:
-			Z_ossf_mask = ak.num(ossf_idx_abs) == 2
+			ossf_mask = ak.num(ossf_idx_abs) == 2
 
-		ossf_idx = ossf_idx[Z_ossf_mask]
-		ossf_idx_abs = ossf_idx_abs[Z_ossf_mask]
+		ossf_idx = ossf_idx[ossf_mask]
+		ossf_idx_abs = ossf_idx_abs[ossf_mask]
 
-		ossf_particles = OSSF(lep_sel,Z_ossf_mask)
+		ossf_particles = OSSF(lep_sel,ossf_mask)
 
 		ossf_MET = ossf_particles[2]
 		ossf_Jet = ossf_particles[3]
@@ -495,37 +506,31 @@ def Selection(file_list, e_num):
 		print("-----> OSSF mask done. : {0}".format(len(ossf_particles[0].PT)))
 		if len(ossf_particles[0].PT) == 0: continue
 
-		lep_sel = Lepton_selection(ossf_particles, e_num)
-
-		print("-----> Lepton selection done. : {0}".format(len(lep_sel[0].PT)))
-		if len(lep_sel[0].PT) == 0: continue
-
 		# Z mass classify & W opposite sign
 
-		lep_z = Zmass_classify(lep_sel, ossf_idx)
+		lep_z = Zmass_classify(ossf_particles, ossf_idx)
 
 		W_OS_mask = (lep_z.lep3.Charge + lep_z.lep4.Charge == 0)
 
-		Wos_lep = lep_z[W_OS_mask]
-		Wos_MET = ossf_MET[W_OS_mask]
-		Wos_Jet = ossf_Jet[W_OS_mask]
-		Wos_HT = ossf_HT[W_OS_mask]
+		lep_Wos = lep_z[W_OS_mask]
+		MET_Wos = ossf_MET[W_OS_mask]
+		Jet_Wos = ossf_Jet[W_OS_mask]
+		HT_Wos = ossf_HT[W_OS_mask]
 
-		print("-----> W OS mask done. : {0}".format(len(Wos_lep.lep1.PT)))
-		if len(Wos_lep.lep1.PT) == 0: continue
+		print("-----> W OS mask done. : {0}".format(len(lep_Wos.lep1.PT)))
+		if len(lep_Wos.lep1.PT) == 0: continue
 
 		# Lepton PT cut
 
-		leadinglep_mask = (Wos_lep.lep1.PT > 25) & (Wos_lep.lep3.PT > 25)
-		subleadinglep_mask = (Wos_lep.lep2.PT > 15) & (Wos_lep.lep4.PT > 15)
+		leadinglep_mask = (lep_Wos.lep1.PT > 25) & (lep_Wos.lep3.PT > 25)
+		subleadinglep_mask = (lep_Wos.lep2.PT > 15) & (lep_Wos.lep4.PT > 15)
 
 		lepPT_mask = leadinglep_mask * subleadinglep_mask
 
-		lepPT_lep = Wos_lep[lepPT_mask]
-
-		lepPT_MET = Wos_MET[lepPT_mask]
-		lepPT_Jet = Wos_Jet[lepPT_mask]
-		lepPT_HT = Wos_HT[lepPT_mask]
+		lepPT_lep = lep_Wos[lepPT_mask]
+		lepPT_MET = MET_Wos[lepPT_mask]
+		lepPT_Jet = Jet_Wos[lepPT_mask]
+		lepPT_HT = HT_Wos[lepPT_mask]
 
 		print("-----> Lepton quadraplet define done. : {0}".format(len(lepPT_lep.lep1.PT)))
 		if len(lepPT_lep.lep1.PT) == 0: continue
@@ -537,39 +542,33 @@ def Selection(file_list, e_num):
 		Z = zlep1 + zlep2
 
 		zmass_mask = (abs(Z.mass - 91.1876) < 20)
-		zwindow_lep = lepPT_lep[zmass_mask]
+		zwindow_lep = lepPT_lep
 
-		zwindow_MET = lepPT_MET[zmass_mask]
-		zwindow_Jet = lepPT_Jet[zmass_mask]
-		zwindow_HT = lepPT_HT[zmass_mask]
+		zwindow_MET = lepPT_MET
+		zwindow_Jet = lepPT_Jet
+		zwindow_HT = lepPT_HT
 
 		print("-----> Z mass window done. : {0}".format(len(zwindow_lep.lep1.PT)))
 		if len(zwindow_lep.lep1.PT) == 0: continue
 
 		# W leptons mass cut
 
-		if (e_num % 2 == 0):
-			wlep1 = vector.obj(pt=zwindow_lep.lep3.PT, phi=zwindow_lep.lep3.Phi, eta=zwindow_lep.lep3.Eta, mass=0)
-			wlep2 = vector.obj(pt=zwindow_lep.lep4.PT, phi=zwindow_lep.lep4.Phi, eta=zwindow_lep.lep4.Eta, mass=0)
-			wleptons = wlep1 + wlep2
+		wlep1 = vector.obj(pt=zwindow_lep.lep3.PT, phi=zwindow_lep.lep3.Phi, eta=zwindow_lep.lep3.Eta, mass=0)
+		wlep2 = vector.obj(pt=zwindow_lep.lep4.PT, phi=zwindow_lep.lep4.Phi, eta=zwindow_lep.lep4.Eta, mass=0)
+		wleptons = wlep1 + wlep2
 
-			wlepmask = (abs(wleptons.mass - 91.1876) > 10)
-			#wlepmask2 = (wleptons.mass > 5)
+#		wlepmask = (abs(wleptons.mass - 91.1876) > 10)
+		#wlepmask2 = (wleptons.mass > 5)
 
-			#wlepmask = wlepmask1 * wlepmask2
+		#wlepmask = wlepmask1 * wlepmask2
 
-			wlep_lep = zwindow_lep[wlepmask]
-			wlep_MET = zwindow_MET[wlepmask]
-			wlep_Jet = zwindow_Jet[wlepmask]
-			wlep_HT = zwindow_HT[wlepmask]
+		wlep_lep = zwindow_lep
+		wlep_MET = zwindow_MET
+		wlep_Jet = zwindow_Jet
+		wlep_HT = zwindow_HT
 
-			print("-----> W leptons mass cut done. : {0}".format(len(wlep_lep.lep1.PT)))
-			if len(wlep_lep.lep1.PT) == 0: continue
-		else:
-			wlep_lep = zwindow_lep
-			wlep_MET = zwindow_MET
-			wlep_Jet = zwindow_Jet
-			wlep_HT = zwindow_HT
+		print("-----> W leptons mass cut done. : {0}".format(len(wlep_lep.lep1.PT)))
+		if len(wlep_lep.lep1.PT) == 0: continue
 
 		# B Tagging score cut
 	
@@ -595,122 +594,45 @@ def Selection(file_list, e_num):
 		if len(btag_lep.lep1.PT) == 0: continue
 
 		# MET cut
-		
-		if (e_num % 2 == 0):
-			METmask = btag_MET.MET > 84
+
+#		METmask = btag_MET.MET >= 68
+
+		MET_MET = btag_MET
+		MET_one_mask = ak.num(MET_MET) > 0
+
+		MET_lep = btag_lep[MET_one_mask]
+		MET_Jet = btag_Jet[MET_one_mask]
+		MET_MET = MET_MET[MET_one_mask]
+		MET_HT = btag_HT[MET_one_mask]
 
 
-			MET_MET = btag_MET[METmask]
-			MET_one_mask = ak.num(MET_MET) > 0
-
-			MET_lep = btag_lep[MET_one_mask]
-			MET_Jet = btag_Jet[MET_one_mask]
-			MET_MET = btag_MET[MET_one_mask]
-			MET_HT = btag_HT[MET_one_mask]
-
-			print("-----> MET mask done. : {0}".format(len(MET_lep.lep1.PT)))
-			if len(MET_lep.lep1.PT) == 0: continue
-
-		else:
-
-			zlep1 = vector.obj(pt=btag_lep.lep1.PT, phi=btag_lep.lep1.Phi, eta=btag_lep.lep1.Eta, mass=0)
-			zlep2 = vector.obj(pt=btag_lep.lep2.PT, phi=btag_lep.lep2.Phi, eta=btag_lep.lep2.Eta, mass=0)
-			Z = zlep1 + zlep2
-
-#			Zmass_mask = abs(Z.mass - 91.1876) < 5
-			MET_mask = ak.flatten(btag_MET.MET > 30)
-
-#			ZM_mask = ~(Zmass_mask * MET_mask)
-
-			MET_lep = btag_lep[MET_mask]
-			MET_Jet = btag_Jet[MET_mask]
-			MET_MET = btag_MET[MET_mask]
-			MET_HT = btag_HT[MET_mask]
-
-			print("-----> MET mask done. : {0}".format(len(MET_lep.lep1.PT)))
-			if len(MET_lep.lep1.PT) == 0: continue
-				
-
-
-		# 4 leptons PT cut
-
-		if (e_num % 2 == 0):
-#			fst_lep = vector.obj(pt=MET_lep.lep1.PT, phi=MET_lep.lep1.Phi, eta=MET_lep.lep1.Eta, mass=0)
-#			snd_lep = vector.obj(pt=MET_lep.lep2.PT, phi=MET_lep.lep2.Phi, eta=MET_lep.lep2.Eta, mass=0)
-#			trd_lep = vector.obj(pt=MET_lep.lep3.PT, phi=MET_lep.lep3.Phi, eta=MET_lep.lep3.Eta, mass=0)
-#			frt_lep = vector.obj(pt=MET_lep.lep4.PT, phi=MET_lep.lep4.Phi, eta=MET_lep.lep4.Eta, mass=0)
-
-#			four_lep = fst_lep + snd_lep + trd_lep + frt_lep
-
-#			fourPT_mask = four_lep.pt > 0
-
-			flep_lep = MET_lep#[fourPT_mask]
-			flep_Jet = MET_Jet#[fourPT_mask]
-			flep_MET = MET_MET#[fourPT_mask]
-			flep_HT = MET_HT#[fourPT_mask]
-
-			print("-----> Four leptons PT mask done. : {0}".format(len(flep_lep.lep1.PT)))
-		else:
-#			fst_lep = vector.obj(pt=MET_lep.lep1.PT, phi=MET_lep.lep1.Phi, eta=MET_lep.lep1.Eta, mass=0)
-#			snd_lep = vector.obj(pt=MET_lep.lep2.PT, phi=MET_lep.lep2.Phi, eta=MET_lep.lep2.Eta, mass=0)
-#			trd_lep = vector.obj(pt=MET_lep.lep3.PT, phi=MET_lep.lep3.Phi, eta=MET_lep.lep3.Eta, mass=0)
-#			frt_lep = vector.obj(pt=MET_lep.lep4.PT, phi=MET_lep.lep4.Phi, eta=MET_lep.lep4.Eta, mass=0)
-
-#			four_lep = fst_lep + snd_lep + trd_lep + frt_lep
-
-#			fourPT_mask = four_lep.pt > 0
-
-			
-			flep_lep = MET_lep#[fourPT_mask]
-			flep_Jet = MET_Jet#[fourPT_mask]
-			flep_MET = MET_MET#[fourPT_mask]
-			flep_HT = MET_HT#[fourPT_mask]
-
-		# HT cut
-
-		if (e_num % 2 == 1):
-
-			HT_mask = flep_HT['HT'] > 300
-			HT_mask = ak.flatten(HT_mask)
-
-			HT_lep = flep_lep[HT_mask]
-			HT_Jet = flep_Jet[HT_mask]
-			HT_MET = flep_MET[HT_mask]
-			HT_HT = flep_HT[HT_mask]
-
-			print("-----> HT mask done. : {0}".format(len(HT_lep.lep1.PT)))
-		else:
-			HT_lep = flep_lep
-			HT_Jet = flep_Jet
-			HT_MET = flep_MET
-			HT_HT = flep_HT
-			
+		print("-----> MET mask done. : {0}".format(len(MET_lep.lep1.PT)))
+		if len(MET_lep.lep1.PT) == 0: continue
 
 		# MT2 calculation
 
-	#	mt2 = calMT2(flep_lep, flep_MET)
-	#	mt2 = ak.flatten(mt2)
-	#	mt2 = np.where(mt2<0,0,mt2)
+		mt2 = calMT2(MET_lep, MET_MET)
+		mt2 = ak.flatten(mt2)
+		mt2 = np.where(mt2<0,0,mt2)
 
 		# MT2 cut
 
 		#print(mt2)
-	#	MT2mask = mt2 > 25
+#		MT2mask = mt2 >= 97
 
-		MT2_lep = HT_lep#[MT2mask]
-		MT2_MET = HT_MET#[MT2mask]
-		MT2_Jet = HT_Jet#[MT2mask]
-		MT2_HT = HT_HT
+		MT2_lep = MET_lep
+		MT2_MET = MET_MET
+		MT2_Jet = MET_Jet
+		MT2_HT = MET_HT
 
 		print("-----> MT2 mask done. : {0}".format(len(MT2_lep.lep1.PT)))
 		if len(MT2_lep.lep1.PT) == 0: continue
 
-		mt2 = calMT2(MT2_lep, MT2_MET)
-		mt2 = ak.flatten(mt2)
-		mt2 = np.where(mt2<0,0,mt2)
+#		mt2 = calMT2(MT2_lep, MT2_MET)
+#		mt2 = ak.flatten(mt2)
+#		mt2 = np.where(mt2<0,0,mt2)
 
 		#print(mt2)
-
 		# Event counting
 		count += len(MT2_lep.lep1.PT)
 		#print(count)
@@ -726,9 +648,9 @@ def Selection(file_list, e_num):
 
 			dilep = fst_lep + snd_lep
 			wleps = trd_lep + frt_lep
-
-			fourlep = dilep + wleps
 			
+			fourlep = dilep + wleps
+
 			MET_vec = vector.obj(pt=MT2_MET.MET, phi=MT2_MET.Phi)
 			
 			Jet_vec = vector.obj(pt=MT2_Jet.PT, phi=MT2_Jet.Phi, eta=MT2_Jet.Eta, mass=0)
@@ -833,7 +755,6 @@ def Selection(file_list, e_num):
 
 				histo['Jet_pt'] = np.concatenate([histo['Jet_pt'], Jet_pt])
 				histo['Jet_btag'] = np.concatenate([histo['Jet_btag'], Jet_btag])
-
 				histo['HT'] = np.concatenate([histo['HT'], Scalar_HT])
 		except ValueError:
 			print("empty")
