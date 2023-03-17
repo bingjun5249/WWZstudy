@@ -474,15 +474,15 @@ def HT(stk_HT, WWZ_HT, weight, color, label, com):
 
  	
 for com in com_list:
-	os.chdir('/home/bjpark/WWZ/DRAW/DNN/png/')
+	os.chdir('C:/Users/user/Desktop/WWZstudy/DRAW/dnn/')
 
 	# Data load
-	infile = '/home/bjpark/WWZ/ML/DNN/storage/run_files/total/trial'+trial+'/total_prediction.csv'
+	infile = 'C:/Users/user/Desktop/ML/DNN/storage/run_file/trial'+trial+'/combined_prediction.csv'
 	df = pd.read_csv(infile)
 	cut_df = df[df['prediction'] >= thr]
 	idx = cut_df.iloc[:,[0]].values.flatten()
 
-	testset = '/home/bjpark/WWZ/ML/DNN/storage/run_files/total/trial'+trial+'/total_testset.h5'
+	testset = 'C:/Users/user/Desktop/ML/DNN/storage/run_file/trial'+trial+'/combined_testset.h5'
 	test_df = pd.read_hdf(testset)
 	after = test_df.iloc[idx]
 	
@@ -520,12 +520,7 @@ for com in com_list:
 		for i in range(len(bkg_vari)):
 			ttbar[''+bkg_vari[i]] = []
 
-	if com == 'even':
-		print("-----> ee/mm channel")
-	elif com == 'odd':
-		print("-----> em channel")
-	else:
-		print("-----> total")
+	
 
 	# Number of events
 	print("Number of events of WWZ : {0}".format(len(WWZ['fstlep_pt'])))
@@ -576,7 +571,7 @@ for com in com_list:
 	sig_yield = Yield['WWZ']
 	back_yield = (Yield['ZZ']+Yield['ttbarZ']+Yield['tWZ']+Yield['WZZ']+Yield['ZZZ']+Yield['WZ']+Yield['ZG']+Yield['Z']+Yield['ttbar'])
 #	sig = math.sqrt(2 * (sig_yield + back_yield) * math.log(1 + (sig_yield / back_yield)) - sig_yield)
-	sig = Yield['WWZ']/math.sqrt(Yield['ZZ']+Yield['ttbarZ']+Yield['tWZ']+Yield['WZZ']+Yield['ZZZ']+Yield['WZ']+Yield['ZG']+Yield['Z']+Yield['ttbar'])
+	sig = sig_yield/math.sqrt(sig_yield+back_yield)
 
 	print("WWZ expected yield: {0}".format(Yield['WWZ']))
 	print("ZZ expected yield: {0}".format(Yield['ZZ']))
@@ -588,7 +583,7 @@ for com in com_list:
 	print("ZG expected yield: {0}".format(Yield['ZG']))
 	print("Z expected yield: {0}".format(Yield['Z']))
 	print("ttbar expected yield: {0}".format(Yield['ttbar']))
-	print("total expected yield: {0}".format(back_yield))
+	print("background expected yield: {0}".format(back_yield))
 
 	print("Expected Significance: {0}".format(sig))
 
