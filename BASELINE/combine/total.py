@@ -41,20 +41,29 @@ def Loop(file_list):
 			frtlep_eta = arrays['frtlep_eta']
 			frtlep_phi = arrays['frtlep_phi']
 
+			dilep_mass = histo['dilep_mass']
+			di_z1w1_mass = histo['di_z1w1_mass']
+			di_z1w2_mass = histo['di_z1w2_mass']
+			di_z2w1_mass = histo['di_z2w1_mass']
+			di_z2w2_mass = histo['di_z2w2_mass']
+			wleps_mass = histo['wleps_mass']
+
+			tri_121_mass = histo['tri_121_mass']
+			tri_122_mass = histo['tri_122_mass']
+			tri_211_mass = histo['tri_211_mass']
+			
 			fourlep_pt = arrays['fourlep_pt']
 			fourlep_mass = arrays['fourlep_mass']
 			
-			dilep_mass = arrays['dilep_mass']
-			wleps_mass = arrays['wleps_mass']
-
 			MET_MET = arrays['MET_MET']
 			MET_phi = arrays['MET_phi']
 			MT2 = arrays['MT2']
+			HT = arrays['HT']
 
 			jet_pt = arrays['Jet_pt']
 			jet_btag = arrays['Jet_btag']
 
-			HT = arrays['HT']
+			Channel_info = arrays['Channel']
 	
 			if len(histo) == 0:
 				histo['fstlep_pt'] = fstlep_pt
@@ -73,20 +82,29 @@ def Loop(file_list):
 				histo['frtlep_eta'] = frtlep_eta
 				histo['frtlep_phi'] = frtlep_phi
 
+				histo['dilep_mass'] = dilep_mass
+				histo['di_z1w1_mass'] = di_z1w1_mass
+				histo['di_z1w2_mass'] = di_z1w2_mass
+				histo['di_z2w1_mass'] = di_z2w1_mass
+				histo['di_z2w2_mass'] = di_z2w2_mass
+				histo['wleps_mass'] = wleps_mass
+
+				histo['tri_121_mass'] = tri_121_mass
+				histo['tri_122_mass'] = tri_122_mass
+				histo['tri_211_mass'] = tri_211_mass
+
 				histo['fourlep_pt'] = fourlep_pt
 				histo['fourlep_mass'] = fourlep_mass
-
-				histo['dilep_mass'] = dilep_mass
-				histo['wleps_mass'] = wleps_mass
 
 				histo['MET_MET'] = MET_MET
 				histo['MET_phi'] = MET_phi
 				histo['MT2'] = MT2
+				histo['HT'] = HT
 	
 				histo['jet_pt'] = jet_pt
 				histo['jet_btag'] = jet_btag
 
-				histo['HT'] = HT
+				histo['Channel'] = Channel_info
 
 			else:
 				histo['fstlep_pt'] = np.concatenate([histo['fstlep_pt'], fstlep_pt])
@@ -105,20 +123,29 @@ def Loop(file_list):
 				histo['frtlep_eta'] = np.concatenate([histo['frtlep_eta'], frtlep_eta])
 				histo['frtlep_phi'] = np.concatenate([histo['frtlep_phi'], frtlep_phi])
 
+				histo['dilep_mass'] = np.concatenate([histo['dilep_mass'], dilep_mass])
+				histo['di_z1w1_mass'] = np.concatenate([histo['di_z1w1_mass'], di_z1w1_mass])
+				histo['di_z1w2_mass'] = np.concatenate([histo['di_z1w2_mass'], di_z1w2_mass])
+				histo['di_z2w1_mass'] = np.concatenate([histo['di_z2w1_mass'], di_z2w1_mass])
+				histo['di_z2w2_mass'] = np.concatenate([histo['di_z2w2_mass'], di_z2w2_mass])
+				histo['wleps_mass'] = np.concatenate([histo['wleps_mass'], wleps_mass])
+
+				histo['tri_121_mass'] = np.concatenate([histo['tri_121_mass'], tri_121_mass])
+				histo['tri_122_mass'] = np.concatenate([histo['tri_122_mass'], tri_122_mass])
+				histo['tri_211_mass'] = np.concatenate([histo['tri_211_mass'], tri_211_mass])
+
 				histo['fourlep_pt'] = np.concatenate([histo['fourlep_pt'], fourlep_pt])
 				histo['fourlep_mass'] = np.concatenate([histo['fourlep_mass'], fourlep_mass])
-
-				histo['dilep_mass'] = np.concatenate([histo['dilep_mass'], dilep_mass])
-				histo['wleps_mass'] = np.concatenate([histo['wleps_mass'], wleps_mass])
 
 				histo['MET_MET'] = np.concatenate([histo['MET_MET'], MET_MET])
 				histo['MET_phi'] = np.concatenate([histo['MET_phi'], MET_phi])
 				histo['MT2'] = np.concatenate([histo['MT2'], MT2])
+				histo['HT'] = np.concatenate([histo['HT'], HT])
 
 				histo['jet_pt'] = np.concatenate([histo['jet_pt'], jet_pt])
 				histo['jet_btag'] = np.concatenate([histo['jet_btag'], jet_btag])
 
-				histo['HT'] = np.concatenate([histo['HT'], HT])
+				histo['Channel'] = np.concatenate([histo['Channel'], Channel_info])
 		except KeyError:
 			print("empty")
 

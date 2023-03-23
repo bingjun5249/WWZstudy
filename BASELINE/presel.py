@@ -646,11 +646,21 @@ def Selection(file_list, e_num):
 			trd_lep = vector.obj(pt=MT2_lep.lep3.PT, phi=MT2_lep.lep3.Phi, eta=MT2_lep.lep3.Eta, mass=0)
 			frt_lep = vector.obj(pt=MT2_lep.lep4.PT, phi=MT2_lep.lep4.Phi, eta=MT2_lep.lep4.Eta, mass=0)
 
+			# Di-lepotn masses
 			dilep = fst_lep + snd_lep
+			di_z1w1 = fst_lep + trd_lep
+			di_z1w2 = fst_lep + frt_lep
+			di_z2w1 = snd_lep + trd_lep
+			di_z2w2 = snd_lep + frt_lep
 			wleps = trd_lep + frt_lep
-			
-			fourlep = dilep + wleps
 
+			# Tri-lepton masses
+			tri_121 = fst_lep + snd_lep + trd_lep
+			tri_122 = fst_lep + snd_lep + frt_lep
+			tri_211 = fst_lep + trd_lep + frt_lep
+
+			fourlep = dilep + wleps
+			
 			MET_vec = vector.obj(pt=MT2_MET.MET, phi=MT2_MET.Phi)
 			
 			Jet_vec = vector.obj(pt=MT2_Jet.PT, phi=MT2_Jet.Phi, eta=MT2_Jet.Eta, mass=0)
@@ -675,22 +685,31 @@ def Selection(file_list, e_num):
 			frtlep_phi = ak.to_numpy(frt_lep.phi)
 			frtlep_eta = ak.to_numpy(frt_lep.eta)
 
+			dilep_mass = ak.to_numpy(dilep.mass)
+			di_z1w1_mass = ak.to_numpy(di_z1w1.mass)
+			di_z1w2_mass = ak.to_numpy(di_z1w2.mass)
+			di_z2w1_mass = ak.to_numpy(di_z2w1.mass)
+			di_z2w2_mass = ak.to_numpy(di_z2w2.mass)
+			wleps_mass = ak.to_numpy(wleps.mass)
+
+			tri_121_mass = ak.to_numpy(tri_121.mass)
+			tri_122_mass = ak.to_numpy(tri_122.mass)
+			tri_211_mass = ak.to_numpy(tri_211.mass)
+
 			fourlep_pt = ak.to_numpy(fourlep.pt)
 			fourlep_mass = ak.to_numpy(fourlep.mass)
-
-			dilep_mass = ak.to_numpy(dilep.mass)
-			wleps_mass = ak.to_numpy(wleps.mass)
 
 			MET_MET = ak.to_numpy(ak.flatten(MT2_MET.MET))
 			MET_phi = ak.to_numpy(ak.flatten(MT2_MET.Phi))
 			MT2 = ak.to_numpy(mt2)
+			Scalar_HT = np.array(ak.to_numpy(ak.flatten(ScalarHT)), dtype=np.float64)
 
 			Jet_list = []
 			for i in range(len(Jet_vec.pt)): Jet_list.append(Jet_vec.pt[i][0])
 			Jet_pt = Jet_list
 			Jet_btag = ak.to_numpy(ak.flatten(MT2_Jet['BTag']))
 
-			Scalar_HT = np.array(ak.to_numpy(ak.flatten(ScalarHT)), dtype=np.float64)
+			Channel_info = np.full(len(MT2_lep.lep1.PT),e_num)
 
 			# Output histo
 	
@@ -711,21 +730,29 @@ def Selection(file_list, e_num):
 				histo['frtlep_phi'] = frtlep_phi
 				histo['frtlep_eta'] = frtlep_eta
 
+				histo['dilep_mass'] = dilep_mass
+				histo['di_z1w1_mass'] = di_z1w1_mass
+				histo['di_z1w2_mass'] = di_z1w2_mass
+				histo['di_z2w1_mass'] = di_z2w1_mass
+				histo['di_z2w2_mass'] = di_z2w2_mass
+				histo['wleps_mass'] = wleps_mass
+
+				histo['tri_121_mass'] = tri_121_mass
+				histo['tri_122_mass'] = tri_122_mass
+				histo['tri_211_mass'] = tri_211_mass
+
 				histo['fourlep_pt'] = fourlep_pt
 				histo['fourlep_mass'] = fourlep_mass
 
-				histo['dilep_mass'] = dilep_mass
-				histo['wleps_mass'] = wleps_mass
-		
 				histo['MET_MET'] = MET_MET
 				histo['MET_phi'] = MET_phi
 				histo['MT2'] = MT2
+				histo['HT'] = Scalar_HT
 
 				histo['Jet_pt'] = Jet_pt
 				histo['Jet_btag'] = Jet_btag
 
-				histo['HT'] = Scalar_HT
-			
+				histo['Channel'] = Channel_info
 			else:
 				histo['fstlep_pt'] = np.concatenate([histo['fstlep_pt'], fstlep_pt])
 				histo['fstlep_phi'] = np.concatenate([histo['fstlep_phi'], fstlep_phi])
@@ -743,19 +770,29 @@ def Selection(file_list, e_num):
 				histo['frtlep_phi'] = np.concatenate([histo['frtlep_phi'], frtlep_phi])
 				histo['frtlep_eta'] = np.concatenate([histo['frtlep_eta'], frtlep_eta])
 
+				histo['dilep_mass'] = np.concatenate([histo['dilep_mass'], dilep_mass])
+				histo['di_z1w1_mass'] = np.concatenate([histo['di_z1w1_mass'], di_z1w1_mass])
+				histo['di_z1w2_mass'] = np.concatenate([histo['di_z1w2_mass'], di_z1w2_mass])
+				histo['di_z2w1_mass'] = np.concatenate([histo['di_z2w1_mass'], di_z2w1_mass])
+				histo['di_z2w2_mass'] = np.concatenate([histo['di_z2w2_mass'], di_z2w2_mass])
+				histo['wleps_mass'] = np.concatenate([histo['wleps_mass'], wleps_mass])
+
+				histo['tri_121_mass'] = np.concatenate([histo['tri_121_mass'], tri_121_mass])
+				histo['tri_122_mass'] = np.concatenate([histo['tri_122_mass'], tri_122_mass])
+				histo['tri_211_mass'] = np.concatenate([histo['tri_211_mass'], tri_211_mass])
+
 				histo['fourlep_pt'] = np.concatenate([histo['fourlep_pt'], fourlep_pt])
 				histo['fourlep_mass'] = np.concatenate([histo['fourlep_mass'], fourlep_mass])
-
-				histo['dilep_mass'] = np.concatenate([histo['dilep_mass'], dilep_mass])
-				histo['wleps_mass'] = np.concatenate([histo['wleps_mass'], wleps_mass])
 
 				histo['MET_MET'] = np.concatenate([histo['MET_MET'], MET_MET])
 				histo['MET_phi'] = np.concatenate([histo['MET_phi'], MET_phi])
 				histo['MT2'] = np.concatenate([histo['MT2'], MT2])
+				histo['HT'] = np.concatenate([histo['HT'], Scalar_HT])
 
 				histo['Jet_pt'] = np.concatenate([histo['Jet_pt'], Jet_pt])
 				histo['Jet_btag'] = np.concatenate([histo['Jet_btag'], Jet_btag])
-				histo['HT'] = np.concatenate([histo['HT'], Scalar_HT])
+
+				histo['Channel'] = np.concatenate([histo['Channel'], Channel_info])
 		except ValueError:
 			print("empty")
 	events.append(count)
@@ -769,15 +806,16 @@ channeltype = ["4m","1e3m","2e2m","3e1m","4e"]
 
 #for datagroup in dataset:
 for process in datatype:
-	dir_path = "/home/bjpark/WWZ/skim/condorOut/x6/spool/bjpark/condor/condorplace/"+process+"/rootOut/*.root"
-	file_list = glob.glob(dir_path)
-	flist = []
-	for f in file_list:
-		flist.append(f+':Delphes')
-	print("Now working on <"+channeltype[e_num]+"> channel <"+process+"> process...")
-	histo = Selection(file_list, e_num)
-	outname = dir_path.split("/")[-3]+"_"+channeltype[e_num]+".npy"
-	np.save('/home/bjpark/WWZ/BASELINE/data/{0}/{1}/{2}'.format(channeltype[e_num],process,outname), histo, allow_pickle=True)
+	for files in dataset:
+		dir_path = "/home/bjpark/WWZ/skim/condorOut/x6/spool/bjpark/condor/condorplace/"+process+"/rootOut/"+files+"/*.root"
+		file_list = glob.glob(dir_path)
+		flist = []
+		for f in file_list:
+			flist.append(f+':Delphes')
+		print("Now working on <"+channeltype[e_num]+"> channel <"+process+"> process...")
+		histo = Selection(file_list, e_num)
+		outname = dir_path.split("/")[-4]+"_"+dir_path.split("/")[-2]+"_"+channeltype[e_num]+".npy"
+		np.save('/home/bjpark/WWZ/BASELINE/data/{0}/{1}/{2}'.format(channeltype[e_num],process,outname), histo, allow_pickle=True)
 
 print("End Process....")
 print("--- %s seconds ---" % (time.time() - start_time))
