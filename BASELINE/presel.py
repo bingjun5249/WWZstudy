@@ -11,8 +11,10 @@ from mt2 import mt2
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--enum', type=int,default=4,help="--enum NUMBER_OF_ELECTRON")
+parser.add_argument('--proc', type=str,default='WWZ',help="--proc PROCESS NAME")
 args = parser.parse_args()
 e_num = args.enum
+process = args.proc
 
 start_time = time.time()
 
@@ -739,7 +741,7 @@ def Selection(file_list, e_num):
 
 				histo['tri_121_mass'] = tri_121_mass
 				histo['tri_122_mass'] = tri_122_mass
-				histo['tri_211_mass'] = tri_211_mass
+				histo['tri_212_mass'] = tri_211_mass
 
 				histo['fourlep_pt'] = fourlep_pt
 				histo['fourlep_mass'] = fourlep_mass
@@ -779,7 +781,7 @@ def Selection(file_list, e_num):
 
 				histo['tri_121_mass'] = np.concatenate([histo['tri_121_mass'], tri_121_mass])
 				histo['tri_122_mass'] = np.concatenate([histo['tri_122_mass'], tri_122_mass])
-				histo['tri_211_mass'] = np.concatenate([histo['tri_211_mass'], tri_211_mass])
+				histo['tri_212_mass'] = np.concatenate([histo['tri_211_mass'], tri_211_mass])
 
 				histo['fourlep_pt'] = np.concatenate([histo['fourlep_pt'], fourlep_pt])
 				histo['fourlep_mass'] = np.concatenate([histo['fourlep_mass'], fourlep_mass])
@@ -801,29 +803,29 @@ def Selection(file_list, e_num):
 
 
 dataset = ["First","Second","Third","Fourth","Fifth","Sixth","Seventh","Eighth","Nineth","Tenth"]
-datatype = ["WWZ", "ZZ_L", "ttbarZ", "WZZToinclusive", "ZZZToinclusive", "ZToallall", "ZGToinclusive", "ttbar", "WZ", "tWZToinclusive"]
+#datatype = ["WWZ", "ZZ_L", "ttbarZ", "WZZToinclusive", "ZZZToinclusive", "ZToallall", "ZGToinclusive", "ttbar", "WZ", "tWZToinclusive"]
 channeltype = ["4m","1e3m","2e2m","3e1m","4e"]
 
 #for datagroup in dataset:
-for process in datatype:
-	for files in dataset:
-		dir_path = "/home/bjpark/WWZ/skim/condorOut/x6/spool/bjpark/condor/condorplace/"+process+"/rootOut/"+files+"/*.root"
-		file_list = glob.glob(dir_path)
-		flist = []
-		for f in file_list:
-			flist.append(f+':Delphes')
-		print("Now working on <"+channeltype[e_num]+"> channel <"+process+"> process...")
-		histo = Selection(file_list, e_num)
-		outname = dir_path.split("/")[-4]+"_"+dir_path.split("/")[-2]+"_"+channeltype[e_num]+".npy"
-		np.save('/home/bjpark/WWZ/BASELINE/data/{0}/{1}/{2}'.format(channeltype[e_num],process,outname), histo, allow_pickle=True)
+#for process in datatype:
+for files in dataset:
+	dir_path = "/home/bjpark/WWZ/skim/condorOut/x6/spool/bjpark/condor/condorplace/"+process+"/rootOut/"+files+"/*.root"
+	file_list = glob.glob(dir_path)
+	flist = []
+	for f in file_list:
+		flist.append(f+':Delphes')
+	print("Now working on <"+channeltype[e_num]+"> channel <"+process+"> process...")
+	histo = Selection(file_list, e_num)
+	outname = dir_path.split("/")[-4]+"_"+dir_path.split("/")[-2]+"_"+channeltype[e_num]+".npy"
+	np.save('/home/bjpark/WWZ/BASELINE/data/{0}/{1}/{2}'.format(channeltype[e_num],process,outname), histo, allow_pickle=True)
 
 print("End Process....")
 print("--- %s seconds ---" % (time.time() - start_time))
 print("\n")
 
-
+'''
 for i in range(len(datatype)):
 	print("-----{0} process-----".format(datatype[i]))
 	print("{0} channel : {1}".format(channeltype[e_num], events[i]))
 
-
+'''

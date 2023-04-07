@@ -54,7 +54,7 @@ def Loop(file_list):
 
 			tri_121_mass = arrays['tri_121_mass']
 			tri_122_mass = arrays['tri_122_mass']
-			tri_212_mass = arrays['tri_211_mass']
+			tri_211_mass = arrays['tri_211_mass']
 			
 			fourlep_pt = arrays['fourlep_pt']
 			fourlep_mass = arrays['fourlep_mass']
@@ -64,8 +64,8 @@ def Loop(file_list):
 			MT2 = arrays['MT2']
 			HT = arrays['HT']
 
-			Jet_pt = arrays['Jet_pt']
-			Jet_btag = arrays['Jet_btag']
+			jet_pt = arrays['Jet_pt']
+			jet_btag = arrays['Jet_btag']
 
 			Channel_info = arrays['Channel']
 	
@@ -95,7 +95,7 @@ def Loop(file_list):
 
 				histo['tri_121_mass'] = tri_121_mass
 				histo['tri_122_mass'] = tri_122_mass
-				histo['tri_212_mass'] = tri_212_mass
+				histo['tri_211_mass'] = tri_211_mass
 
 				histo['fourlep_pt'] = fourlep_pt
 				histo['fourlep_mass'] = fourlep_mass
@@ -105,8 +105,8 @@ def Loop(file_list):
 				histo['MT2'] = MT2
 				histo['HT'] = HT
 	
-				histo['Jet_pt'] = Jet_pt
-				histo['Jet_btag'] = Jet_btag
+				histo['jet_pt'] = jet_pt
+				histo['jet_btag'] = jet_btag
 
 				histo['Channel'] = Channel_info
 
@@ -136,7 +136,7 @@ def Loop(file_list):
 
 				histo['tri_121_mass'] = np.concatenate([histo['tri_121_mass'], tri_121_mass])
 				histo['tri_122_mass'] = np.concatenate([histo['tri_122_mass'], tri_122_mass])
-				histo['tri_212_mass'] = np.concatenate([histo['tri_212_mass'], tri_212_mass])
+				histo['tri_211_mass'] = np.concatenate([histo['tri_211_mass'], tri_211_mass])
 
 				histo['fourlep_pt'] = np.concatenate([histo['fourlep_pt'], fourlep_pt])
 				histo['fourlep_mass'] = np.concatenate([histo['fourlep_mass'], fourlep_mass])
@@ -146,8 +146,8 @@ def Loop(file_list):
 				histo['MT2'] = np.concatenate([histo['MT2'], MT2])
 				histo['HT'] = np.concatenate([histo['HT'], HT])
 
-				histo['Jet_pt'] = np.concatenate([histo['Jet_pt'], Jet_pt])
-				histo['Jet_btag'] = np.concatenate([histo['Jet_btag'], Jet_btag])
+				histo['jet_pt'] = np.concatenate([histo['jet_pt'], jet_pt])
+				histo['jet_btag'] = np.concatenate([histo['jet_btag'], jet_btag])
 
 				histo['Channel'] = np.concatenate([histo['Channel'], Channel_info])
 		except KeyError:
@@ -165,16 +165,16 @@ def Events(process, histo):
 
 for com in com_list:
 
-	WWZ = '/home/bjpark/WWZ/BASELINE/combine/data/newVari/WWZ/'+com+'/*.npy'
-	ZZ = '/home/bjpark/WWZ/BASELINE/combine/data/newVari/ZZ/'+com+'/*.npy'
-	Z = '/home/bjpark/WWZ/BASELINE/combine/data/newVari/Z/'+com+'/*.npy'
-	WZ = '/home/bjpark/WWZ/BASELINE/combine/data/newVari/WZ/'+com+'/*.npy'
-	ZG = '/home/bjpark/WWZ/BASELINE/combine/data/newVari/ZG/'+com+'/*.npy'
-	WZZ = '/home/bjpark/WWZ/BASELINE/combine/data/newVari/WZZ/'+com+'/*.npy'
-	ZZZ = '/home/bjpark/WWZ/BASELINE/combine/data/newVari/ZZZ/'+com+'/*.npy'
-	tWZ = '/home/bjpark/WWZ/BASELINE/combine/data/newVari/tWZ/'+com+'/*.npy'
-	ttbar = '/home/bjpark/WWZ/BASELINE/combine/data/newVari/ttbar/'+com+'/*.npy'
-	ttbarZ = '/home/bjpark/WWZ/BASELINE/combine/data/newVari/ttbarZ/'+com+'/*.npy'
+	WWZ = '/home/bjpark/WWZ/BASELINE/combine/data/WWZ/'+com+'/*.npy'
+	ZZ = '/home/bjpark/WWZ/BASELINE/combine/data/ZZ/'+com+'/*.npy'
+	ttbarZ = '/home/bjpark/WWZ/BASELINE/combine/data/ttbarZ/'+com+'/*.npy'
+	tWZ = '/home/bjpark/WWZ/BASELINE/combine/data/tWZ/'+com+'/*.npy'
+	Z = '/home/bjpark/WWZ/BASELINE/combine/data/Z/'+com+'/*.npy'
+	ZG = '/home/bjpark/WWZ/BASELINE/combine/data/ZG/'+com+'/*.npy'
+	WZ = '/home/bjpark/WWZ/BASELINE/combine/data/WZ/'+com+'/*.npy'
+	WZZ = '/home/bjpark/WWZ/BASELINE/combine/data/WZZ/'+com+'/*.npy'
+	ZZZ = '/home/bjpark/WWZ/BASELINE/combine/data/ZZZ/'+com+'/*.npy'
+	ttbar = '/home/bjpark/WWZ/BASELINE/combine/data/ttbar/'+com+'/*.npy'
 
 
 	WWZ_proc_list = glob.glob(WWZ)
@@ -260,7 +260,7 @@ for com in com_list:
 	combine['tWZ'] = tWZ
 
 	outname = "combine_"+com+".npy"
-	np.save('/home/bjpark/WWZ/DRAW/baseline/npy/combine/proc/{0}'.format(outname), combine)
+	np.save('/home/bjpark/WWZ/DRAW/baseline/npy/combine/{0}'.format(outname), combine)
 
 print("END")
 

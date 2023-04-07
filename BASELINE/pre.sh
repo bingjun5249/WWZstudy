@@ -1,0 +1,10 @@
+python presel.py --enum $1 --proc WWZ
+python presel.py --enum $1 --proc ZZ_L
+python presel.py --enum $1 --proc ttbarZ
+python presel.py --enum $1 --proc WZZToinclusive
+python presel.py --enum $1 --proc ZZZToinclusive
+python presel.py --enum $1 --proc ZToallall
+python presel.py --enum $1 --proc ZGToinclusive
+python presel.py --enum $1 --proc ttbar
+python presel.py --enum $1 --proc WZ
+python presel.py --enum $1 --proc tWZToinclusive

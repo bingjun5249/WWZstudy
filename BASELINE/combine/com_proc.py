@@ -6,21 +6,24 @@ import glob
 
 com_list = ['even','odd']
 channel_list = ['4e','3e1m','2e2m','1e3m','4m']
-data_list = ['WWZ','ZZ','ttbarZ','WZZ','ZZZ','WZ','ZG','Z','ttbar','tWZ']
+proc_list = ['WWZ','ZZ','ttbarZ','WZZ','ZZZ','WZ','ZG','Z','ttbar','tWZ']
+data_list = ['Fist', 'Second', 'Third','Fourth','Fifth','Sixth','Seventh','Eighth','Nineth','Tenth']
 
-def Load_even(proc_list):
+
+def Load(proc_list):
 	First = np.load(proc_list[0],allow_pickle=True)[()]
 	Second = np.load(proc_list[1],allow_pickle=True)[()]
 	Third = np.load(proc_list[2],allow_pickle=True)[()]
+	Fourth = np.load(proc_list[3],allow_pickle=True)[()]
+	Fifth = np.load(proc_list[4],allow_pickle=True)[()]
+	Sixth = np.load(proc_list[5],allow_pickle=True)[()]
+	Seventh = np.load(proc_list[6],allow_pickle=True)[()]
+	Eighth = np.load(proc_list[7],allow_pickle=True)[()]
+	Nineth = np.load(proc_list[8],allow_pickle=True)[()]
+	Tenth = np.load(proc_list[9],allow_pickle=True)[()]
 
-	process_list = [First, Second, Third]
-	return process_list
 
-def Load_odd(proc_list):
-	First = np.load(proc_list[0],allow_pickle=True)[()]
-	Second = np.load(proc_list[1],allow_pickle=True)[()]
-
-	process_list = [First, Second]
+	process_list = [First, Second, Third, Fourth, Fifth,Sixth,Seventh,Eighth,Nineth,Tenth]
 	return process_list
 
 def Loop(file_list):
@@ -58,17 +61,16 @@ def Loop(file_list):
 			
 			fourlep_pt = arrays['fourlep_pt']
 			fourlep_mass = arrays['fourlep_mass']
-			
+
 			MET_MET = arrays['MET_MET']
 			MET_phi = arrays['MET_phi']
 			MT2 = arrays['MT2']
 			HT = arrays['HT']
 
-			Jet_pt = arrays['Jet_pt']
-			Jet_btag = arrays['Jet_btag']
+			jet_pt = arrays['Jet_pt']
+			jet_btag = arrays['Jet_btag']
 
 			Channel_info = arrays['Channel']
-	
 			if len(histo) == 0:
 				histo['fstlep_pt'] = fstlep_pt
 				histo['fstlep_eta'] = fstlep_eta
@@ -105,8 +107,8 @@ def Loop(file_list):
 				histo['MT2'] = MT2
 				histo['HT'] = HT
 	
-				histo['Jet_pt'] = Jet_pt
-				histo['Jet_btag'] = Jet_btag
+				histo['Jet_pt'] = jet_pt
+				histo['Jet_btag'] = jet_btag
 
 				histo['Channel'] = Channel_info
 
@@ -146,8 +148,8 @@ def Loop(file_list):
 				histo['MT2'] = np.concatenate([histo['MT2'], MT2])
 				histo['HT'] = np.concatenate([histo['HT'], HT])
 
-				histo['Jet_pt'] = np.concatenate([histo['Jet_pt'], Jet_pt])
-				histo['Jet_btag'] = np.concatenate([histo['Jet_btag'], Jet_btag])
+				histo['Jet_pt'] = np.concatenate([histo['Jet_pt'], jet_pt])
+				histo['Jet_btag'] = np.concatenate([histo['Jet_btag'], jet_btag])
 
 				histo['Channel'] = np.concatenate([histo['Channel'], Channel_info])
 		except KeyError:
@@ -161,106 +163,48 @@ def Events(process, histo):
 		if len(histo[p]) == 0:
 			print("Number of {0} Events : 0".format(process[p]))
 		else:
-			print("Number of {0} Events : {1}".format(process[p], len(histo[p]['dilep_mass'])))
+			print("Number of {0} Events : {1}".format(process[p], len(histo[p]['fstlep_pt'])))
 
-for com in com_list:
+for i in proc_list:
+	print(i+' process...')
+	for j in channel_list:
+		eeee = '/home/bjpark/WWZ/BASELINE/combine/data/'+i+'/'+j+'/*.npy'
+		#eeem = '/home/bjpark/WWZ/BASELINE/combine/data/'+i+'/'+j+'/*.npy'
+		#eemm = '/home/bjpark/WWZ/BASELINE/combine/data/'+i+'/'+j+'/*.npy'
+		#emmm = '/home/bjpark/WWZ/BASELINE/combine/data/'+i+'/'+j+'/*.npy'
+		#mmmm = '/home/bjpark/WWZ/BASELINE/combine/data/'+i+'/'+j+'/*.npy'
 
-	WWZ = '/home/bjpark/WWZ/BASELINE/combine/data/newVari/WWZ/'+com+'/*.npy'
-	ZZ = '/home/bjpark/WWZ/BASELINE/combine/data/newVari/ZZ/'+com+'/*.npy'
-	Z = '/home/bjpark/WWZ/BASELINE/combine/data/newVari/Z/'+com+'/*.npy'
-	WZ = '/home/bjpark/WWZ/BASELINE/combine/data/newVari/WZ/'+com+'/*.npy'
-	ZG = '/home/bjpark/WWZ/BASELINE/combine/data/newVari/ZG/'+com+'/*.npy'
-	WZZ = '/home/bjpark/WWZ/BASELINE/combine/data/newVari/WZZ/'+com+'/*.npy'
-	ZZZ = '/home/bjpark/WWZ/BASELINE/combine/data/newVari/ZZZ/'+com+'/*.npy'
-	tWZ = '/home/bjpark/WWZ/BASELINE/combine/data/newVari/tWZ/'+com+'/*.npy'
-	ttbar = '/home/bjpark/WWZ/BASELINE/combine/data/newVari/ttbar/'+com+'/*.npy'
-	ttbarZ = '/home/bjpark/WWZ/BASELINE/combine/data/newVari/ttbarZ/'+com+'/*.npy'
+		eeee_proc_list = glob.glob(eeee)
+		#eeem_proc_list = glob.glob(eeem)
+		#eemm_proc_list = glob.glob(eemm)
+		#emmm_proc_list = glob.glob(emmm)
+		#mmmm_proc_list = glob.glob(mmmm)
 
-
-	WWZ_proc_list = glob.glob(WWZ)
-	ZZ_proc_list = glob.glob(ZZ)
-	ttbarZ_proc_list = glob.glob(ttbarZ)
-	WZZ_proc_list = glob.glob(WZZ)
-	ZZZ_proc_list = glob.glob(ZZZ)
-	WZ_proc_list = glob.glob(WZ)
-	ZG_proc_list = glob.glob(ZG)
-	Z_proc_list = glob.glob(Z)
-	tWZ_proc_list = glob.glob(tWZ)
-	ttbar_proc_list = glob.glob(ttbar)
-
-	if com == 'even':
-		WWZ_list = Load_even(WWZ_proc_list)
-		ZZ_list = Load_even(ZZ_proc_list)
-		ttbarZ_list = Load_even(ttbarZ_proc_list)
-		WZZ_list = Load_even(WZZ_proc_list)
-		ZZZ_list = Load_even(ZZZ_proc_list)
-		WZ_list = Load_even(WZ_proc_list)
-		ZG_list = Load_even(ZG_proc_list)
-		Z_list = Load_even(Z_proc_list)
-		tWZ_list = Load_even(tWZ_proc_list)
-		ttbar_list = Load_even(ttbar_proc_list)
-	else:
-		WWZ_list = Load_odd(WWZ_proc_list)
-		ZZ_list = Load_odd(ZZ_proc_list)
-		ttbarZ_list = Load_odd(ttbarZ_proc_list)
-		WZZ_list = Load_odd(WZZ_proc_list)
-		ZZZ_list = Load_odd(ZZZ_proc_list)
-		WZ_list = Load_odd(WZ_proc_list)
-		ZG_list = Load_odd(ZG_proc_list)
-		Z_list = Load_odd(Z_proc_list)
-		tWZ_list = Load_odd(tWZ_proc_list)
-		ttbar_list = Load_odd(ttbar_proc_list)
-	histo = []
+		eeee_list = Load(eeee_proc_list)
+		#eeem_list = Load(eeem_proc_list)
+		#eemm_list = Load(eemm_proc_list)
+		#emmm_list = Load(emmm_proc_list)
+		#mmmm_list = Load(mmmm_proc_list)
 
 
-	WWZ = Loop(WWZ_list)
-	histo.append(WWZ)
-	ZZ = Loop(ZZ_list)
-	histo.append(ZZ)
-	ttbarZ = Loop(ttbarZ_list)
-	histo.append(ttbarZ)
-	WZZ = Loop(WZZ_list)
-	histo.append(WZZ)
-	ZZZ = Loop(ZZZ_list)
-	histo.append(ZZZ)
-	WZ = Loop(WZ_list)
-	histo.append(WZ)
-	ZG = Loop(ZG_list)
-	histo.append(ZG)
-	Z = Loop(Z_list)
-	histo.append(Z)
-	ttbar = Loop(ttbar_list)
-	histo.append(ttbar)
-	tWZ = Loop(tWZ_list)
-	histo.append(tWZ)
+		eeee = Loop(eeee_list)
+		outname1 = "combine_"+j+".npy"
+		np.save('/home/bjpark/WWZ/BASELINE/combine/data/newVari/'+i+'/{0}'.format(outname1), eeee)
+		#eeem = Loop(eeem_list)
+		#outname2 = "combine_3e1m.npy"
+		#np.save('/home/bjpark/WWZ/DRAW/baseline/npy/combine/proc/'+i+'/{0}'.format(outname2), outname2)
+		#eemm = Loop(eemm_list)
+		#outname3 = "combine_2e2m.npy"
+		#np.save('/home/bjpark/WWZ/DRAW/baseline/npy/combine/proc/'+i+'/{0}'.format(outname3), outname3)
+		#emmm = Loop(emmm_list)
+		#outname4 = "combine_1e3m.npy"
+		#np.save('/home/bjpark/WWZ/DRAW/baseline/npy/combine/proc/'+i+'/{0}'.format(outname4), outname4)
+		#mmmm = Loop(mmmm_list)
+		#outname5 = "combine_4m.npy"
+		#np.save('/home/bjpark/WWZ/DRAW/baseline/npy/combine/proc/'+i+'/{0}'.format(outname5), outname5)
 
-	Events(data_list, histo)
-	'''
-	print("Number of ZZ Events : {0}\n".format(len(ZZ['dilep_mass'])))
-	print("Number of ttbarZ Events : {0}\n".format(len(ttbarZ['dilep_mass'])))
-	print("Number of WZZ Events : {0}\n".format(len(WZZ['dilep_mass'])))
-	print("Number of ZZZ Events : {0}\n".format(len(ZZZ['dilep_mass'])))
-	print("Number of WZ Events : {0}\n".format(len(WZ['dilep_mass'])))
-	print("Number of ZG Events : {0}\n".format(len(ZG['dilep_mass'])))
-	print("Number of Z Events : {0}\n".format(len(Z['dilep_mass'])))
-	print("Number of tWZ Events : {0}\n".format(len(tWZ['dilep_mass'])))
-	print("Number of ttbar Events : {0}\n".format(len(ttbar['dilep_mass'])))
+		#Events(proc_list, histo)
 
-	'''
-	combine = {}
-	combine['WWZ'] = WWZ
-	combine['ZZ'] = ZZ
-	combine['ttbarZ'] = ttbarZ
-	combine['WZZ'] = WZZ
-	combine['ZZZ'] = ZZZ
-	combine['WZ'] = WZ
-	combine['ZG'] = ZG
-	combine['Z'] = Z
-	combine['ttbar'] = ttbar
-	combine['tWZ'] = tWZ
-
-	outname = "combine_"+com+".npy"
-	np.save('/home/bjpark/WWZ/DRAW/baseline/npy/combine/proc/{0}'.format(outname), combine)
 
 print("END")
 

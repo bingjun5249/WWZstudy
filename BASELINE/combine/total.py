@@ -41,16 +41,16 @@ def Loop(file_list):
 			frtlep_eta = arrays['frtlep_eta']
 			frtlep_phi = arrays['frtlep_phi']
 
-			dilep_mass = histo['dilep_mass']
-			di_z1w1_mass = histo['di_z1w1_mass']
-			di_z1w2_mass = histo['di_z1w2_mass']
-			di_z2w1_mass = histo['di_z2w1_mass']
-			di_z2w2_mass = histo['di_z2w2_mass']
-			wleps_mass = histo['wleps_mass']
+			dilep_mass = arrays['dilep_mass']
+			di_z1w1_mass = arrays['di_z1w1_mass']
+			di_z1w2_mass = arrays['di_z1w2_mass']
+			di_z2w1_mass = arrays['di_z2w1_mass']
+			di_z2w2_mass = arrays['di_z2w2_mass']
+			wleps_mass = arrays['wleps_mass']
 
-			tri_121_mass = histo['tri_121_mass']
-			tri_122_mass = histo['tri_122_mass']
-			tri_211_mass = histo['tri_211_mass']
+			tri_121_mass = arrays['tri_121_mass']
+			tri_122_mass = arrays['tri_122_mass']
+			tri_212_mass = arrays['tri_212_mass']
 			
 			fourlep_pt = arrays['fourlep_pt']
 			fourlep_mass = arrays['fourlep_mass']
@@ -91,7 +91,7 @@ def Loop(file_list):
 
 				histo['tri_121_mass'] = tri_121_mass
 				histo['tri_122_mass'] = tri_122_mass
-				histo['tri_211_mass'] = tri_211_mass
+				histo['tri_212_mass'] = tri_212_mass
 
 				histo['fourlep_pt'] = fourlep_pt
 				histo['fourlep_mass'] = fourlep_mass
@@ -101,8 +101,8 @@ def Loop(file_list):
 				histo['MT2'] = MT2
 				histo['HT'] = HT
 	
-				histo['jet_pt'] = jet_pt
-				histo['jet_btag'] = jet_btag
+				histo['Jet_pt'] = jet_pt
+				histo['Jet_btag'] = jet_btag
 
 				histo['Channel'] = Channel_info
 
@@ -132,7 +132,7 @@ def Loop(file_list):
 
 				histo['tri_121_mass'] = np.concatenate([histo['tri_121_mass'], tri_121_mass])
 				histo['tri_122_mass'] = np.concatenate([histo['tri_122_mass'], tri_122_mass])
-				histo['tri_211_mass'] = np.concatenate([histo['tri_211_mass'], tri_211_mass])
+				histo['tri_212_mass'] = np.concatenate([histo['tri_212_mass'], tri_212_mass])
 
 				histo['fourlep_pt'] = np.concatenate([histo['fourlep_pt'], fourlep_pt])
 				histo['fourlep_mass'] = np.concatenate([histo['fourlep_mass'], fourlep_mass])
@@ -142,8 +142,8 @@ def Loop(file_list):
 				histo['MT2'] = np.concatenate([histo['MT2'], MT2])
 				histo['HT'] = np.concatenate([histo['HT'], HT])
 
-				histo['jet_pt'] = np.concatenate([histo['jet_pt'], jet_pt])
-				histo['jet_btag'] = np.concatenate([histo['jet_btag'], jet_btag])
+				histo['Jet_pt'] = np.concatenate([histo['Jet_pt'], jet_pt])
+				histo['Jet_btag'] = np.concatenate([histo['Jet_btag'], jet_btag])
 
 				histo['Channel'] = np.concatenate([histo['Channel'], Channel_info])
 		except KeyError:
@@ -160,16 +160,16 @@ def Events(process, histo):
 			print("Number of {0} Events : {1}".format(process[p], len(histo[p]['fstlep_pt'])))
 
 
-WWZ = '/home/bjpark/WWZ/BASELINE/combine/data/WWZ/total/*'
-ZZ = '/home/bjpark/WWZ/BASELINE/combine/data/ZZ/total/*'
-ttbarZ = '/home/bjpark/WWZ/BASELINE/combine/data/ttbarZ/total/*'
-tWZ = '/home/bjpark/WWZ/BASELINE/combine/data/tWZ/total/*'
-Z = '/home/bjpark/WWZ/BASELINE/combine/data/Z/total/*'
-ZG = '/home/bjpark/WWZ/BASELINE/combine/data/ZG/total/*'
-WZ = '/home/bjpark/WWZ/BASELINE/combine/data/WZ/total/*'
-WZZ = '/home/bjpark/WWZ/BASELINE/combine/data/WZZ/total/*'
-ZZZ = '/home/bjpark/WWZ/BASELINE/combine/data/ZZZ/total/*'
-ttbar = '/home/bjpark/WWZ/BASELINE/combine/data/ttbar/total/*'
+WWZ = '/home/bjpark/WWZ/BASELINE/combine/data/newVari/WWZ/*.npy'
+ZZ = '/home/bjpark/WWZ/BASELINE/combine/data/newVari/ZZ/*.npy'
+ttbarZ = '/home/bjpark/WWZ/BASELINE/combine/data/newVari/ttbarZ/*.npy'
+tWZ = '/home/bjpark/WWZ/BASELINE/combine/data/newVari/tWZ/*.npy'
+Z = '/home/bjpark/WWZ/BASELINE/combine/data/newVari/Z/*.npy'
+ZG = '/home/bjpark/WWZ/BASELINE/combine/data/newVari/ZG/*.npy'
+WZ = '/home/bjpark/WWZ/BASELINE/combine/data/newVari/WZ/*.npy'
+WZZ = '/home/bjpark/WWZ/BASELINE/combine/data/newVari/WZZ/*.npy'
+ZZZ = '/home/bjpark/WWZ/BASELINE/combine/data/newVari/ZZZ/*.npy'
+ttbar = '/home/bjpark/WWZ/BASELINE/combine/data/newVari/ttbar/*.npy'
 
 WWZ_proc_list = glob.glob(WWZ)
 ZZ_proc_list = glob.glob(ZZ)
@@ -216,7 +216,7 @@ histo.append(ttbar)
 tWZ = Loop(tWZ_list)
 histo.append(tWZ)
 
-Events(data_list, histo)
+Events(channel_list, histo)
 '''
 print("Number of ZZ Events : {0}\n".format(len(ZZ['dilep_mass'])))
 print("Number of ttbarZ Events : {0}\n".format(len(ttbarZ['dilep_mass'])))
@@ -241,8 +241,8 @@ combine['Z'] = Z
 combine['ttbar'] = ttbar
 combine['tWZ'] = tWZ
 
-outname = "combine_total.npy"
-np.save('/home/bjpark/WWZ/DRAW/baseline/npy/combine/{0}'.format(outname), combine)
+outname = "combine_proc.npy"
+np.save('/home/bjpark/WWZ/DRAW/baseline/npy/combine/proc/{0}'.format(outname), combine)
 
 print("END")
 

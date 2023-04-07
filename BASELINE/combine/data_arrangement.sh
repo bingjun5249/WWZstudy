@@ -1,0 +1,10 @@
+cp /home/bjpark/WWZ/DRAW/baseline/npy/combine/proc/WWZ/* /home/bjpark/WWZ/BASELINE/combine/data/newVari/WWZ
+cp /home/bjpark/WWZ/DRAW/baseline/npy/combine/proc/Z/* /home/bjpark/WWZ/BASELINE/combine/data/newVari/Z
+cp /home/bjpark/WWZ/DRAW/baseline/npy/combine/proc/WZ/* /home/bjpark/WWZ/BASELINE/combine/data/newVari/WZ
+cp /home/bjpark/WWZ/DRAW/baseline/npy/combine/proc/ZG/* /home/bjpark/WWZ/BASELINE/combine/data/newVari/ZG
+cp /home/bjpark/WWZ/DRAW/baseline/npy/combine/proc/ZZ/* /home/bjpark/WWZ/BASELINE/combine/data/newVari/ZZ
+cp /home/bjpark/WWZ/DRAW/baseline/npy/combine/proc/WZZ/* /home/bjpark/WWZ/BASELINE/combine/data/newVari/WZZ
+cp /home/bjpark/WWZ/DRAW/baseline/npy/combine/proc/ZZZ/* /home/bjpark/WWZ/BASELINE/combine/data/newVari/ZZZ
+cp /home/bjpark/WWZ/DRAW/baseline/npy/combine/proc/tWZ/* /home/bjpark/WWZ/BASELINE/combine/data/newVari/tWZ
+cp /home/bjpark/WWZ/DRAW/baseline/npy/combine/proc/ttbar/* /home/bjpark/WWZ/BASELINE/combine/data/newVari/ttbar
+cp /home/bjpark/WWZ/DRAW/baseline/npy/combine/proc/ttbarZ/* /home/bjpark/WWZ/BASELINE/combine/data/newVari/ttbarZ
