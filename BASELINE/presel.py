@@ -524,8 +524,8 @@ def Selection(file_list, e_num):
 
 		# Lepton PT cut
 
-		leadinglep_mask = (lep_Wos.lep1.PT > 25) & (lep_Wos.lep3.PT > 25)
-		subleadinglep_mask = (lep_Wos.lep2.PT > 15) & (lep_Wos.lep4.PT > 15)
+		leadinglep_mask = (lep_Wos.lep1.PT > 25) & (lep_Wos.lep3.PT > 25) & (lep_Wos.lep4.PT > 25)
+		subleadinglep_mask = (lep_Wos.lep2.PT > 15)
 
 		lepPT_mask = leadinglep_mask * subleadinglep_mask
 
@@ -559,15 +559,15 @@ def Selection(file_list, e_num):
 		wlep2 = vector.obj(pt=zwindow_lep.lep4.PT, phi=zwindow_lep.lep4.Phi, eta=zwindow_lep.lep4.Eta, mass=0)
 		wleptons = wlep1 + wlep2
 
-#		wlepmask = (abs(wleptons.mass - 91.1876) > 10)
+		#wlepmask = (abs(wleptons.mass - 91.1876) > 1)
 		#wlepmask2 = (wleptons.mass > 5)
 
 		#wlepmask = wlepmask1 * wlepmask2
 
-		wlep_lep = zwindow_lep
-		wlep_MET = zwindow_MET
-		wlep_Jet = zwindow_Jet
-		wlep_HT = zwindow_HT
+		wlep_lep = zwindow_lep#[wlepmask]
+		wlep_MET = zwindow_MET#[wlepmask]
+		wlep_Jet = zwindow_Jet#[wlepmask]
+		wlep_HT = zwindow_HT#[wlepmask]
 
 		print("-----> W leptons mass cut done. : {0}".format(len(wlep_lep.lep1.PT)))
 		if len(wlep_lep.lep1.PT) == 0: continue
@@ -659,7 +659,8 @@ def Selection(file_list, e_num):
 			# Tri-lepton masses
 			tri_121 = fst_lep + snd_lep + trd_lep
 			tri_122 = fst_lep + snd_lep + frt_lep
-			tri_211 = fst_lep + trd_lep + frt_lep
+			tri_112 = fst_lep + trd_lep + frt_lep
+			tri_211 = snd_lep + trd_lep + frt_lep
 
 			fourlep = dilep + wleps
 			
@@ -696,7 +697,8 @@ def Selection(file_list, e_num):
 
 			tri_121_mass = ak.to_numpy(tri_121.mass)
 			tri_122_mass = ak.to_numpy(tri_122.mass)
-			tri_211_mass = ak.to_numpy(tri_211.mass)
+			tri_112_mass = ak.to_numpy(tri_112.mass)
+			tri_212_mass = ak.to_numpy(tri_211.mass)
 
 			fourlep_pt = ak.to_numpy(fourlep.pt)
 			fourlep_mass = ak.to_numpy(fourlep.mass)
@@ -741,7 +743,8 @@ def Selection(file_list, e_num):
 
 				histo['tri_121_mass'] = tri_121_mass
 				histo['tri_122_mass'] = tri_122_mass
-				histo['tri_212_mass'] = tri_211_mass
+				histo['tri_112_mass'] = tri_112_mass
+				histo['tri_212_mass'] = tri_212_mass
 
 				histo['fourlep_pt'] = fourlep_pt
 				histo['fourlep_mass'] = fourlep_mass
@@ -781,7 +784,8 @@ def Selection(file_list, e_num):
 
 				histo['tri_121_mass'] = np.concatenate([histo['tri_121_mass'], tri_121_mass])
 				histo['tri_122_mass'] = np.concatenate([histo['tri_122_mass'], tri_122_mass])
-				histo['tri_212_mass'] = np.concatenate([histo['tri_211_mass'], tri_211_mass])
+				histo['tri_112_mass'] = np.concatenate([histo['tri_112_mass'], tri_112_mass])
+				histo['tri_212_mass'] = np.concatenate([histo['tri_212_mass'], tri_212_mass])
 
 				histo['fourlep_pt'] = np.concatenate([histo['fourlep_pt'], fourlep_pt])
 				histo['fourlep_mass'] = np.concatenate([histo['fourlep_mass'], fourlep_mass])
